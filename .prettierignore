@@ -1,0 +1,16 @@
+# Ignore artifacts:
+node_modules
+.next
+.git
+Dockerfile
+dist
+images
+.aws
+.env
+.npmrc
+.nvmrc
+.gitignore
+.prettierignore
+.DS_Store
+*.log
+.nyc_output/*

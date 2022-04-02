@@ -1,0 +1,25 @@
+{
+  "plugins": ["@typescript-eslint", "eslint-plugin-react", "eslint-plugin-react-hooks", "jest"],
+  "parserOptions": {
+    "project": ["./tsconfig.json"]
+  },
+  "env": {
+    "browser": true,
+    "node": true,
+    "es6": true,
+    "jest": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:jest/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "next",
+    "prettier"
+  ],
+  "rules": {
+    "no-console": "off",
+    "require-atomic-updates": 0,
+    "@typescript-eslint/camelcase": 0
+  }
+}
