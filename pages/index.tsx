@@ -7,7 +7,8 @@ import Box from '@mui/material/Box';
 import FullHeight from '~/src/common/components/FullHeight';
 import Link from '~/src/common/components/Link';
 import { useGetToken } from '~/src/common/auth';
-import { useGetPostingsData } from '~/src/index';
+import { useGetPostingsData, PageHeading } from '~/src/index';
+import { Grid } from '@mui/material';
 // import postingsData from '~/src/index/fakeData';
 
 const Home: NextPage = () => {
@@ -43,12 +44,17 @@ const Home: NextPage = () => {
   return (
     <FullHeight>
       <Container maxWidth="lg">
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <PageHeading text={jobSearchTerm} />
+          </Grid>
+        </Grid>
         <Box
           sx={{
             my: 4,
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'center',
+            justifyContent: 'flex-start',
             alignItems: 'center',
           }}
         >
@@ -66,7 +72,7 @@ const Home: NextPage = () => {
               }
             `}
           >
-            MUI v5 + Next.js with TypeScript example
+            MUI v5 + Next.js with TypeScript example {jobSearchTerm}
           </Typography>
           <Link href="/about" color="secondary">
             Go to the about page
