@@ -8,6 +8,7 @@ import { Hydrate, QueryClient, QueryClientProvider } from 'react-query';
 import { AppPageProps } from '~/src/common/types';
 import theme from '~/src/common/theme';
 import createEmotionCache from '~/src//common/createEmotionCache';
+import '~/styles/globals.css';
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
