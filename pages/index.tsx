@@ -1,13 +1,12 @@
 import { useState } from 'react';
 import type { NextPage } from 'next';
-import { css } from '@emotion/react';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import FullHeight from '~/src/common/components/FullHeight';
 import Link from '~/src/common/components/Link';
 import { useGetToken } from '~/src/common/auth';
-import { PageHeading, JobPostingsOverview, UniquePostingsTrend, useGetUniquePostingsTrend } from '~/src/index';
+import { PageHeading, JobPostingsOverview, UniquePostingsTrend, TopPostingsTable } from '~/src/index';
 import { Grid } from '@mui/material';
 // import postingsData from '~/src/index/fakeData';
 
@@ -49,6 +48,19 @@ const Home: NextPage = () => {
         </Grid>
         <JobPostingsOverview jobSearchTerm={jobSearchTerm} token={token} />
         <UniquePostingsTrend jobSearchTerm={jobSearchTerm} token={token} />
+        <TopPostingsTable
+          rankingObject="Company"
+          rankingFacet="company_name"
+          jobSearchTerm={jobSearchTerm}
+          token={token}
+        />
+        <TopPostingsTable
+          mb="4rem"
+          rankingObject="City"
+          rankingFacet="city_name"
+          jobSearchTerm={jobSearchTerm}
+          token={token}
+        />
       </Container>
     </FullHeight>
   );

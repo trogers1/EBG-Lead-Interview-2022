@@ -1,4 +1,5 @@
 import { HTMLAttributes } from 'react';
+import { SystemProps } from '@mui/system';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
@@ -6,10 +7,11 @@ import Typography from '@mui/material/Typography';
 import { dynamicNumberFormat } from '~/src/common/utils';
 import { useGetGeneralPostingsData } from './queries';
 
-type Props = HTMLAttributes<HTMLDivElement> & {
-  jobSearchTerm: string;
-  token?: string;
-};
+type Props = HTMLAttributes<HTMLDivElement> &
+  SystemProps & {
+    jobSearchTerm: string;
+    token?: string;
+  };
 
 const OverviewBox = styled(Box)({
   display: 'flex',
@@ -26,7 +28,7 @@ const JobPostingsOverview = ({ jobSearchTerm, token, ...props }: Props) => {
 
   if (!postingsData) {
     return (
-      <Grid container direction="column" justifyContent="space-between" spacing={3} mt="2rem">
+      <Grid container direction="column" justifyContent="space-between" spacing={3} mt="2rem" {...props}>
         <Grid item xs={12}>
           <Typography variant="h5" component="h2" fontWeight="500">
             Job Postings Overview
@@ -52,7 +54,7 @@ const JobPostingsOverview = ({ jobSearchTerm, token, ...props }: Props) => {
   }
 
   return (
-    <Grid container direction="column" justifyContent="space-between" spacing={3} mt="2rem">
+    <Grid container direction="column" justifyContent="space-between" spacing={3} mt="2rem" {...props}>
       <Grid item xs={12}>
         <Typography variant="h5" component="h2" fontWeight="500">
           Job Postings Overview

@@ -30,3 +30,37 @@ export type TimeseriesLineChartDataPoint = {
 };
 
 export type TimeseriesLineChartData = Array<TimeseriesLineChartDataPoint>;
+
+export type TopPostingsRankingFacet = 'company_name' | 'city_name';
+
+export type SingleUniquePostingRankingData = {
+  median_posting_duration: number | null;
+  name: string;
+  posting_intensity: number | null;
+  total_postings: number | null;
+  unique_postings: number | null;
+};
+
+type TopUniquePostingRankingTotals = {
+  median_posting_duration: number | null;
+  posting_intensity: number | null;
+  total_postings: number | null;
+  unique_postings: number | null;
+};
+
+export type TopUniquePostingsRankingsResponse = {
+  data: {
+    ranking: {
+      buckets: SingleUniquePostingRankingData[];
+      facet: TopPostingsRankingFacet;
+      limit: 10;
+      rank_by: 'unique_postings';
+    };
+    totals: TopUniquePostingRankingTotals;
+  };
+};
+
+export type TopUniquePostingsRankings = {
+  ranking: SingleUniquePostingRankingData[];
+  totals: TopUniquePostingRankingTotals;
+};

@@ -1,5 +1,6 @@
 import { HTMLAttributes, useMemo, useState } from 'react';
 import numeral from 'numeral';
+import { SystemProps } from '@mui/system';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { ResponsiveContainer, CartesianGrid, LineChart, XAxis, YAxis, Tooltip, Legend, Line } from 'recharts';
@@ -7,10 +8,11 @@ import { primary } from '~/src/common/theme';
 import { PostingTimeseries, TimeseriesLineChartData } from './types';
 import { useGetUniquePostingsTrend } from './queries';
 
-type Props = HTMLAttributes<HTMLDivElement> & {
-  jobSearchTerm: string;
-  token?: string;
-};
+type Props = HTMLAttributes<HTMLDivElement> &
+  SystemProps & {
+    jobSearchTerm: string;
+    token?: string;
+  };
 
 export const transformTrendData = (
   rawCurrTrendData?: PostingTimeseries,
@@ -64,7 +66,7 @@ const UniquePostingsTrend = ({ jobSearchTerm, token, ...props }: Props) => {
   console.log(JSON.stringify(chartData, null, 2));
   if (!chartData.length) {
     return (
-      <Grid container direction="column" justifyContent="space-between" spacing={3} mt="2rem">
+      <Grid container direction="column" justifyContent="space-between" spacing={3} mt="2rem" {...props}>
         <Grid item xs={12}>
           <Typography variant="h5" component="h2" fontWeight="500">
             Unique Postings Trend
@@ -84,7 +86,7 @@ const UniquePostingsTrend = ({ jobSearchTerm, token, ...props }: Props) => {
     );
   }
   return (
-    <Grid container direction="column" justifyContent="space-between" spacing={3} mt="2rem">
+    <Grid container direction="column" justifyContent="space-between" spacing={3} mt="2rem" {...props}>
       <Grid item xs={12}>
         <Typography variant="h5" component="h2" fontWeight="500">
           Unique Postings Trend

@@ -5,6 +5,9 @@ import {
   GeneralPostingsDataResponse,
   PostingTimeseriesResponse,
   PostingTimeseries,
+  TopUniquePostingsRankingsResponse,
+  TopUniquePostingsRankings,
+  TopPostingsRankingFacet,
 } from './types';
 
 export const BASE_URL = 'https://wft-geo-db.p.rapidapi.com';
@@ -91,7 +94,6 @@ const getUniquePostingsTrend = async (date: Date, jobTitle: string, token: strin
   }
 
   const result = (await response.json()) as PostingTimeseriesResponse;
-  console.log(JSON.stringify(result, null, 2));
 
   return result.data;
 };
@@ -106,6 +108,73 @@ export const useGetUniquePostingsTrend = (
   useQuery<PostingTimeseries, Error>(
     ['postings-data-timeseries', `${date.toISOString().split('T')[0]}`, jobTitle],
     () => getUniquePostingsTrend(date, jobTitle, token!),
+    {
+      staleTime: Infinity,
+      enabled: !!token,
+      ...options,
+    },
+  );
+
+const getTopPostingsRanking = async (
+  jobTitle: string,
+  rankingFacet: TopPostingsRankingFacet,
+  token: string,
+): Promise<TopUniquePostingsRankings> => {
+  const response = await fetch(`https://emsiservices.com/jpa/rankings/${rankingFacet}`, {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      filter: {
+        when: {
+          start: '2016-09',
+          end: '2021-10',
+        },
+        title_name: [jobTitle],
+      },
+      rank: {
+        by: 'unique_postings',
+        limit: 11,
+        extra_metrics: ['posting_intensity', 'total_postings', 'median_posting_duration'],
+      },
+    }),
+  });
+
+  if (!response.ok) {
+    const body = (await response.json()) as UnknownJsonBody;
+    throw new RequestError(
+      Array.isArray(body)
+        ? response.status.toString()
+        : String(body?.error) || String(body?.message) || response.status.toString(),
+      {
+        status: response.status,
+        body,
+      },
+    );
+  }
+
+  const result = (await response.json()) as TopUniquePostingsRankingsResponse;
+
+  return {
+    ranking: result.data.ranking.buckets.filter(
+      (item) => item.name !== 'Unclassified' && item.name !== '[Unknown city]',
+    ),
+    totals: result.data.totals,
+  };
+};
+
+export const useGetTopPostingsRanking = (
+  jobTitle: string,
+  rankingFacet: TopPostingsRankingFacet,
+  token: string | undefined,
+  options: Omit<UseQueryOptions<TopUniquePostingsRankings, Error>, 'queryKey' | 'queryFn'> = {},
+) =>
+  // eslint-disable-next-line
+  useQuery<TopUniquePostingsRankings, Error>(
+    ['postings-data-top-companies', jobTitle, rankingFacet],
+    () => getTopPostingsRanking(jobTitle, rankingFacet, token!),
     {
       staleTime: Infinity,
       enabled: !!token,
