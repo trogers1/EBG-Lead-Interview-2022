@@ -26,6 +26,7 @@ const PageHeading = ({ text, ...props }: Props) => (
         textAlign: 'start',
         width: '100%',
         fontWeight: '500',
+        margin: '1rem',
       }}
     >
       Job Posting Competition: {text}

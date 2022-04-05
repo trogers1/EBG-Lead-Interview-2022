@@ -26,7 +26,7 @@ const JobPostingsOverview = ({ jobSearchTerm, token, ...props }: Props) => {
 
   if (!postingsData) {
     return (
-      <Grid container direction="column" justifyContent="space-between" spacing={1}>
+      <Grid container direction="column" justifyContent="space-between" spacing={3} mt="2rem">
         <Grid item xs={12}>
           <Typography variant="h5" component="h2" fontWeight="500">
             Job Postings Overview
@@ -52,7 +52,7 @@ const JobPostingsOverview = ({ jobSearchTerm, token, ...props }: Props) => {
   }
 
   return (
-    <Grid container direction="column" justifyContent="space-between" spacing={1}>
+    <Grid container direction="column" justifyContent="space-between" spacing={3} mt="2rem">
       <Grid item xs={12}>
         <Typography variant="h5" component="h2" fontWeight="500">
           Job Postings Overview
