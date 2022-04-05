@@ -7,34 +7,14 @@ import Box from '@mui/material/Box';
 import FullHeight from '~/src/common/components/FullHeight';
 import Link from '~/src/common/components/Link';
 import { useGetToken } from '~/src/common/auth';
-import {
-  PageHeading,
-  JobPostingsOverview,
-  UniquePostingsTrend,
-  useGetGeneralPostingsData,
-  useGetUniquePostingsTrend,
-} from '~/src/index';
+import { PageHeading, JobPostingsOverview, UniquePostingsTrend, useGetUniquePostingsTrend } from '~/src/index';
 import { Grid } from '@mui/material';
 // import postingsData from '~/src/index/fakeData';
 
 const Home: NextPage = () => {
   // Fetch the user client-side
   const [jobSearchTerm, setJobSearchTerm] = useState('Software Developers');
-  const [today, _] = useState(new Date());
-  const [thisDateLastYear, __] = useState(() => {
-    const date = new Date();
-    const lastYear = date.getFullYear() - 1;
-    date.setFullYear(lastYear);
-    return date;
-  });
   const { data: token, status: tokenStatus, error: tokenError } = useGetToken();
-  const { data: postingsData, status: postingsDataStatus } = useGetGeneralPostingsData(jobSearchTerm, token);
-  const { data: currTrendData, status: currTrendDataStatus } = useGetUniquePostingsTrend(today, jobSearchTerm, token);
-  const { data: prevTrendData, status: prevTrendDataStatus } = useGetUniquePostingsTrend(
-    thisDateLastYear,
-    jobSearchTerm,
-    token,
-  );
 
   if (tokenStatus === 'error') {
     return (
@@ -47,7 +27,7 @@ const Home: NextPage = () => {
       </FullHeight>
     );
   }
-  if (!token || postingsDataStatus === 'loading') {
+  if (!token) {
     return (
       <FullHeight>
         <Container maxWidth="lg">
@@ -58,7 +38,6 @@ const Home: NextPage = () => {
       </FullHeight>
     );
   }
-  console.log(JSON.stringify(postingsData, null, 2));
 
   return (
     <FullHeight>
@@ -68,11 +47,8 @@ const Home: NextPage = () => {
             <PageHeading text={jobSearchTerm} />
           </Grid>
         </Grid>
-        <JobPostingsOverview
-          unique_postings={postingsData?.unique_postings}
-          total_postings={postingsData?.total_postings}
-        />
-        <UniquePostingsTrend currTrendData={currTrendData} prevTrendData={prevTrendData} />
+        <JobPostingsOverview jobSearchTerm={jobSearchTerm} token={token} />
+        <UniquePostingsTrend jobSearchTerm={jobSearchTerm} token={token} />
       </Container>
     </FullHeight>
   );

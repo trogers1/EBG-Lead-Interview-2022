@@ -5,8 +5,10 @@ export type GeneralPostingsDataResponse = {
 };
 
 export type GeneralPostingsData = {
-  total_postings: number;
-  unique_postings: number;
+  median_posting_duration: number | null;
+  posting_intensity: number | null;
+  total_postings: number | null;
+  unique_postings: number | null;
 };
 
 export type PostingTimeseries = {

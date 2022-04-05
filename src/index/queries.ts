@@ -18,7 +18,7 @@ const getGeneralPostingsData = async (jobTitle: string, token: string): Promise<
     },
     body: JSON.stringify({
       filter: { when: { start: '2016-09', end: '2021-10' }, title_name: [jobTitle] },
-      metrics: ['unique_postings', 'total_postings'],
+      metrics: ['unique_postings', 'total_postings', 'median_posting_duration', 'posting_intensity'],
     }),
   });
 

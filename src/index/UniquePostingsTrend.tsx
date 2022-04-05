@@ -1,16 +1,15 @@
-import { HTMLAttributes, useMemo } from 'react';
+import { HTMLAttributes, useMemo, useState } from 'react';
 import numeral from 'numeral';
 import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import { ResponsiveContainer, CartesianGrid, LineChart, XAxis, YAxis, Tooltip, Legend, Line } from 'recharts';
 import { primary } from '~/src/common/theme';
-import { PostingTimeseries, TimeseriesLineChartData, TimeseriesLineChartDataPoint } from './types';
+import { PostingTimeseries, TimeseriesLineChartData } from './types';
+import { useGetUniquePostingsTrend } from './queries';
 
 type Props = HTMLAttributes<HTMLDivElement> & {
-  currTrendData?: PostingTimeseries;
-  prevTrendData?: PostingTimeseries;
+  jobSearchTerm: string;
+  token?: string;
 };
 
 export const transformTrendData = (
@@ -44,12 +43,46 @@ export const transformTrendData = (
   return trendData;
 };
 
-const UniquePostingsTrend = ({ currTrendData, prevTrendData, ...props }: Props) => {
+const UniquePostingsTrend = ({ jobSearchTerm, token, ...props }: Props) => {
+  const [today, _] = useState(new Date());
+  const [thisDateLastYear, __] = useState(() => {
+    const date = new Date();
+    const lastYear = date.getFullYear() - 1;
+    date.setFullYear(lastYear);
+    return date;
+  });
+  const { data: currTrendData, status: currTrendDataStatus } = useGetUniquePostingsTrend(today, jobSearchTerm, token);
+  const { data: prevTrendData, status: prevTrendDataStatus } = useGetUniquePostingsTrend(
+    thisDateLastYear,
+    jobSearchTerm,
+    token,
+  );
   const chartData: TimeseriesLineChartData = useMemo(
     () => transformTrendData(currTrendData, prevTrendData),
     [currTrendData, prevTrendData],
   );
   console.log(JSON.stringify(chartData, null, 2));
+  if (!chartData.length) {
+    return (
+      <Grid container direction="column" justifyContent="space-between" spacing={3} mt="2rem">
+        <Grid item xs={12}>
+          <Typography variant="h5" component="h2" fontWeight="500">
+            Unique Postings Trend
+          </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <Typography variant="body1" component="p">
+            This view displays the most recent 30 days of job postings activity to show near-term trends.
+          </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <Typography variant="h6" component="p">
+            Loading...
+          </Typography>
+        </Grid>
+      </Grid>
+    );
+  }
   return (
     <Grid container direction="column" justifyContent="space-between" spacing={3} mt="2rem">
       <Grid item xs={12}>

@@ -4,10 +4,11 @@ import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import { dynamicNumberFormat } from '~/src/common/utils';
+import { useGetGeneralPostingsData } from './queries';
 
 type Props = HTMLAttributes<HTMLDivElement> & {
-  total_postings?: number;
-  unique_postings?: number;
+  jobSearchTerm: string;
+  token?: string;
 };
 
 const OverviewBox = styled(Box)({
@@ -20,21 +21,36 @@ const OverviewBox = styled(Box)({
   padding: '2rem',
 });
 
-const JobPostingsOverview = ({ total_postings, unique_postings, ...props }: Props) => {
-  if (!total_postings || !unique_postings) {
+const JobPostingsOverview = ({ jobSearchTerm, token, ...props }: Props) => {
+  const { data: postingsData } = useGetGeneralPostingsData(jobSearchTerm, token);
+
+  if (!postingsData) {
     return (
       <Grid container direction="column" justifyContent="space-between" spacing={1}>
         <Grid item xs={12}>
-          <Typography variant="h5" component="h2">
-            Loading...
+          <Typography variant="h5" component="h2" fontWeight="500">
+            Job Postings Overview
           </Typography>
+        </Grid>
+        <Grid
+          item
+          container
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          wrap="nowrap"
+          spacing={0}
+        >
+          <Grid item xs={12}>
+            <Typography variant="h6" component="p">
+              Loading...
+            </Typography>
+          </Grid>
         </Grid>
       </Grid>
     );
   }
-  const formattedTotal = dynamicNumberFormat(total_postings);
-  const formattedUnique = dynamicNumberFormat(unique_postings);
-  const postingIntensity = Math.round(total_postings / unique_postings);
+
   return (
     <Grid container direction="column" justifyContent="space-between" spacing={1}>
       <Grid item xs={12}>
@@ -45,9 +61,15 @@ const JobPostingsOverview = ({ total_postings, unique_postings, ...props }: Prop
       <Grid item container direction="row" justifyContent="space-between" alignItems="center" wrap="nowrap" spacing={0}>
         <Grid item xs={12} sm={4}>
           <OverviewBox>
-            <Typography variant="h5" fontWeight="100">
-              {formattedUnique}
-            </Typography>
+            {postingsData.unique_postings ? (
+              <Typography variant="h5" fontWeight="100">
+                {dynamicNumberFormat(postingsData.unique_postings)}
+              </Typography>
+            ) : (
+              <Typography variant="h5" fontWeight="100" component="i" sx={{ fontStyle: 'italic' }}>
+                Unknown
+              </Typography>
+            )}
             <Typography>Unique Postings</Typography>
           </OverviewBox>
         </Grid>
@@ -55,17 +77,29 @@ const JobPostingsOverview = ({ total_postings, unique_postings, ...props }: Prop
           <OverviewBox
             sx={{ borderRight: '1px solid rgba(111, 111, 111, .3)', borderLeft: '1px solid rgba(111, 111, 111, .3)' }}
           >
-            <Typography variant="h5" fontWeight="100">
-              {postingIntensity} : 1
-            </Typography>
+            {postingsData.posting_intensity ? (
+              <Typography variant="h5" fontWeight="100">
+                {Math.round(postingsData.posting_intensity)} : 1
+              </Typography>
+            ) : (
+              <Typography variant="h5" fontWeight="100" component="i" sx={{ fontStyle: 'italic' }}>
+                Unknown
+              </Typography>
+            )}
             <Typography>Posting Intensity</Typography>
           </OverviewBox>
         </Grid>
         <Grid item xs={12} sm={4}>
           <OverviewBox>
-            <Typography variant="h5" fontWeight="100">
-              {formattedUnique} days
-            </Typography>
+            {postingsData.median_posting_duration ? (
+              <Typography variant="h5" fontWeight="100">
+                {dynamicNumberFormat(postingsData.median_posting_duration)}
+              </Typography>
+            ) : (
+              <Typography variant="h5" fontWeight="100" component="i" sx={{ fontStyle: 'italic' }}>
+                Unknown
+              </Typography>
+            )}
             <Typography>Median Posting Duration</Typography>
           </OverviewBox>
         </Grid>
@@ -73,18 +107,38 @@ const JobPostingsOverview = ({ total_postings, unique_postings, ...props }: Prop
       <Grid item xs={12}>
         <Typography variant="body1" sx={{ color: 'text.secondary' }} component="p">
           There were{' '}
-          <Typography component="strong" fontWeight={'bold'}>
-            {formattedTotal}
-          </Typography>{' '}
+          {postingsData.total_postings ? (
+            <Typography component="strong" fontWeight="bold">
+              {dynamicNumberFormat(postingsData.total_postings)}
+            </Typography>
+          ) : (
+            <Typography fontWeight="100" component="i" sx={{ fontStyle: 'italic' }}>
+              an Unknown number
+            </Typography>
+          )}{' '}
           total job postings for your selection, of which{' '}
-          <Typography component="strong" fontWeight={'bold'}>
-            {formattedUnique}
-          </Typography>{' '}
+          {postingsData.unique_postings ? (
+            <Typography component="strong" fontWeight="bold">
+              {dynamicNumberFormat(postingsData.unique_postings)}
+            </Typography>
+          ) : (
+            <Typography fontWeight="100" component="i" sx={{ fontStyle: 'italic' }}>
+              an Unknown number
+            </Typography>
+          )}{' '}
           were unique. These numbers give us a Posting Intensity of{' '}
-          <Typography component="strong" fontWeight={'bold'}>
-            {postingIntensity}-to-1
-          </Typography>
-          , meaning that for every {postingIntensity} postings there is 1 unique job posting.
+          {postingsData.posting_intensity ? (
+            <Typography component="strong" fontWeight="bold">
+              {Math.round(postingsData.posting_intensity)}-to-1
+            </Typography>
+          ) : (
+            <Typography fontWeight="100" component="i" sx={{ fontStyle: 'italic' }}>
+              Unknown
+            </Typography>
+          )}
+          , meaning that for every{' '}
+          {postingsData.posting_intensity ? Math.round(postingsData.posting_intensity) : 'Unknown'} postings there is 1
+          unique job posting.
         </Typography>
       </Grid>
     </Grid>
