@@ -7,7 +7,7 @@ import Box from '@mui/material/Box';
 import FullHeight from '~/src/common/components/FullHeight';
 import Link from '~/src/common/components/Link';
 import { useGetToken } from '~/src/common/auth';
-import { useGetPostingsData, PageHeading } from '~/src/index';
+import { useGetGeneralPostingsData, PageHeading, JobPostingsOverview } from '~/src/index';
 import { Grid } from '@mui/material';
 // import postingsData from '~/src/index/fakeData';
 
@@ -15,7 +15,7 @@ const Home: NextPage = () => {
   // Fetch the user client-side
   const [jobSearchTerm, setJobSearchTerm] = useState('Software Developers');
   const { data: token, status: tokenStatus, error: tokenError } = useGetToken();
-  const { data: postingsData, status: postingsDataStatus } = useGetPostingsData(jobSearchTerm, token);
+  const { data: postingsData, status: postingsDataStatus } = useGetGeneralPostingsData(jobSearchTerm, token);
 
   if (tokenStatus === 'error') {
     return (
@@ -49,35 +49,10 @@ const Home: NextPage = () => {
             <PageHeading text={jobSearchTerm} />
           </Grid>
         </Grid>
-        <Box
-          sx={{
-            my: 4,
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'flex-start',
-            alignItems: 'center',
-          }}
-        >
-          <Typography
-            variant="h4"
-            component="h1"
-            css={css`
-              color: #212b48;
-              padding: 32px;
-              background-color: hotpink;
-              font-size: 24px;
-              border-radius: 4px;
-              &:hover {
-                color: red;
-              }
-            `}
-          >
-            MUI v5 + Next.js with TypeScript example {jobSearchTerm}
-          </Typography>
-          <Link href="/about" color="secondary">
-            Go to the about page
-          </Link>
-        </Box>
+        <JobPostingsOverview
+          unique_postings={postingsData!.unique_postings}
+          total_postings={postingsData!.total_postings}
+        />
       </Container>
     </FullHeight>
   );

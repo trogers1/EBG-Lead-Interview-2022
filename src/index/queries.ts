@@ -3,7 +3,18 @@ import { RequestError, UnknownJsonBody } from '~/src/common/httpEntities';
 
 export const BASE_URL = 'https://wft-geo-db.p.rapidapi.com';
 
-export const getPostingsData = async (jobTitle: string, token: string): Promise<object> => {
+export type GeneralPostingsDataResponse = {
+  data: {
+    totals: GeneralPostingsData;
+  };
+};
+
+export type GeneralPostingsData = {
+  total_postings: number;
+  unique_postings: number;
+};
+
+export const getGeneralPostingsData = async (jobTitle: string, token: string): Promise<GeneralPostingsData> => {
   const response = await fetch('https://emsiservices.com/jpa/totals', {
     method: 'POST',
     headers: {
@@ -29,18 +40,19 @@ export const getPostingsData = async (jobTitle: string, token: string): Promise<
     );
   }
 
-  const result = (await response.json()) as object;
+  const result = (await response.json()) as GeneralPostingsDataResponse;
   console.log(JSON.stringify(result, null, 2));
 
-  return result;
+  return result.data.totals;
 };
 
-export const useGetPostingsData = (
+export const useGetGeneralPostingsData = (
   jobTitle: string,
   token: string | undefined,
-  options: Omit<UseQueryOptions<object, Error>, 'queryKey' | 'queryFn'> = {},
+  options: Omit<UseQueryOptions<GeneralPostingsData, Error>, 'queryKey' | 'queryFn'> = {},
 ) =>
-  useQuery<object, Error>(['postings-data'], () => getPostingsData(jobTitle, token), {
+  // eslint-disable-next-line
+  useQuery<GeneralPostingsData, Error>(['postings-data'], () => getGeneralPostingsData(jobTitle, token!), {
     staleTime: Infinity,
     enabled: !!token,
     ...options,

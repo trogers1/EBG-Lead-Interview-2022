@@ -1,3 +1,4 @@
 export * from './queries';
 import PageHeading from './PageHeading';
-export { PageHeading };
+import JobPostingsOverview from './JobPostingsOverview';
+export { PageHeading, JobPostingsOverview };

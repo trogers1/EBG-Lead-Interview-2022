@@ -20,6 +20,7 @@
   "rules": {
     "no-console": "off",
     "require-atomic-updates": 0,
-    "@typescript-eslint/camelcase": 0
+    "@typescript-eslint/camelcase": 0,
+    "@typescript-eslint/no-non-null-assertion": "warn"
   }
 }
