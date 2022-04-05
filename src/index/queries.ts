@@ -10,10 +10,10 @@ import {
   TopPostingsRankingFacet,
 } from './types';
 
-export const BASE_URL = 'https://wft-geo-db.p.rapidapi.com';
+export const BASE_URL = 'https://emsiservices.com/jpa/';
 
 const getGeneralPostingsData = async (jobTitle: string, token: string): Promise<GeneralPostingsData> => {
-  const response = await fetch('https://emsiservices.com/jpa/totals', {
+  const response = await fetch(`${BASE_URL}/totals`, {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
@@ -63,7 +63,7 @@ export const useGetGeneralPostingsData = (
 const getUniquePostingsTrend = async (date: Date, jobTitle: string, token: string): Promise<PostingTimeseries> => {
   const startDate = new Date(date);
   startDate.setDate(date.getDate() - 30);
-  const response = await fetch('https://emsiservices.com/jpa/timeseries', {
+  const response = await fetch(`${BASE_URL}/timeseries`, {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
@@ -121,7 +121,7 @@ const getTopPostingsRanking = async (
   rankingFacet: TopPostingsRankingFacet,
   token: string,
 ): Promise<TopUniquePostingsRankings> => {
-  const response = await fetch(`https://emsiservices.com/jpa/rankings/${rankingFacet}`, {
+  const response = await fetch(`${BASE_URL}/rankings/${rankingFacet}`, {
     method: 'POST',
     headers: {
       'content-type': 'application/json',

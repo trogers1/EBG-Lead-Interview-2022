@@ -24,7 +24,7 @@ const OverviewBox = styled(Box)({
 });
 
 const JobPostingsOverview = ({ jobSearchTerm, token, ...props }: Props) => {
-  const { data: postingsData } = useGetGeneralPostingsData(jobSearchTerm, token);
+  const { data: postingsData, error } = useGetGeneralPostingsData(jobSearchTerm, token);
 
   if (!postingsData) {
     return (
@@ -44,8 +44,8 @@ const JobPostingsOverview = ({ jobSearchTerm, token, ...props }: Props) => {
           spacing={0}
         >
           <Grid item xs={12}>
-            <Typography variant="h6" component="p">
-              Loading...
+            <Typography variant="h6" component="p" color={error ? 'error' : 'primary'}>
+              {error ? `Encountered an error retrieving top postings data: ${error.message}` : 'Loading...'}
             </Typography>
           </Grid>
         </Grid>
