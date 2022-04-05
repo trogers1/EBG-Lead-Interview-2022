@@ -1,6 +1,5 @@
-import { HTMLAttributes, useMemo, useState } from 'react';
+import { HTMLAttributes } from 'react';
 import { SystemProps } from '@mui/system';
-import numeral from 'numeral';
 import pluralize from 'pluralize';
 import Grid from '@mui/material/Grid';
 import { styled } from '@mui/material/styles';
@@ -12,9 +11,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { TopPostingsRankingFacet, TopUniquePostingsRankings, SingleUniquePostingRankingData } from './types';
+import { TopPostingsRankingFacet } from './types';
 import { useGetTopPostingsRanking } from './queries';
-import theme from '../common/theme';
 
 type Props = HTMLAttributes<HTMLDivElement> &
   SystemProps & {

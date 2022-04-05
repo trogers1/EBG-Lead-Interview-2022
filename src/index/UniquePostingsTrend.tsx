@@ -46,19 +46,15 @@ export const transformTrendData = (
 };
 
 const UniquePostingsTrend = ({ jobSearchTerm, token, ...props }: Props) => {
-  const [today, _] = useState(new Date());
-  const [thisDateLastYear, __] = useState(() => {
+  const [today] = useState(new Date());
+  const [thisDateLastYear] = useState(() => {
     const date = new Date();
     const lastYear = date.getFullYear() - 1;
     date.setFullYear(lastYear);
     return date;
   });
-  const { data: currTrendData, status: currTrendDataStatus } = useGetUniquePostingsTrend(today, jobSearchTerm, token);
-  const { data: prevTrendData, status: prevTrendDataStatus } = useGetUniquePostingsTrend(
-    thisDateLastYear,
-    jobSearchTerm,
-    token,
-  );
+  const { data: currTrendData } = useGetUniquePostingsTrend(today, jobSearchTerm, token);
+  const { data: prevTrendData } = useGetUniquePostingsTrend(thisDateLastYear, jobSearchTerm, token);
   const chartData: TimeseriesLineChartData = useMemo(
     () => transformTrendData(currTrendData, prevTrendData),
     [currTrendData, prevTrendData],

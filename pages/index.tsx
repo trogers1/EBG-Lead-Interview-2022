@@ -2,9 +2,7 @@ import { useState } from 'react';
 import type { NextPage } from 'next';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
 import FullHeight from '~/src/common/components/FullHeight';
-import Link from '~/src/common/components/Link';
 import { useGetToken } from '~/src/common/auth';
 import { PageHeading, JobPostingsOverview, UniquePostingsTrend, TopPostingsTable } from '~/src/index';
 import { Grid } from '@mui/material';
@@ -12,7 +10,7 @@ import { Grid } from '@mui/material';
 
 const Home: NextPage = () => {
   // Fetch the user client-side
-  const [jobSearchTerm, setJobSearchTerm] = useState('Software Developers');
+  const [jobSearchTerm] = useState('Software Developers');
   const { data: token, status: tokenStatus, error: tokenError } = useGetToken();
 
   if (tokenStatus === 'error') {

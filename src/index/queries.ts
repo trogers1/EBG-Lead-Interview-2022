@@ -51,6 +51,7 @@ export const useGetGeneralPostingsData = (
   // eslint-disable-next-line
   useQuery<GeneralPostingsData, Error>(
     ['postings-data-general', jobTitle],
+    // eslint-disable-next-line
     () => getGeneralPostingsData(jobTitle, token!),
     {
       staleTime: Infinity,
@@ -104,9 +105,9 @@ export const useGetUniquePostingsTrend = (
   token: string | undefined,
   options: Omit<UseQueryOptions<PostingTimeseries, Error>, 'queryKey' | 'queryFn'> = {},
 ) =>
-  // eslint-disable-next-line
   useQuery<PostingTimeseries, Error>(
     ['postings-data-timeseries', `${date.toISOString().split('T')[0]}`, jobTitle],
+    // eslint-disable-next-line
     () => getUniquePostingsTrend(date, jobTitle, token!),
     {
       staleTime: Infinity,
@@ -171,9 +172,9 @@ export const useGetTopPostingsRanking = (
   token: string | undefined,
   options: Omit<UseQueryOptions<TopUniquePostingsRankings, Error>, 'queryKey' | 'queryFn'> = {},
 ) =>
-  // eslint-disable-next-line
   useQuery<TopUniquePostingsRankings, Error>(
     ['postings-data-top-companies', jobTitle, rankingFacet],
+    // eslint-disable-next-line
     () => getTopPostingsRanking(jobTitle, rankingFacet, token!),
     {
       staleTime: Infinity,
