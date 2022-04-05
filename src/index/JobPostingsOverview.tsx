@@ -6,8 +6,8 @@ import Typography from '@mui/material/Typography';
 import { dynamicNumberFormat } from '~/src/common/utils';
 
 type Props = HTMLAttributes<HTMLDivElement> & {
-  total_postings: number;
-  unique_postings: number;
+  total_postings?: number;
+  unique_postings?: number;
 };
 
 const OverviewBox = styled(Box)({
@@ -15,19 +15,30 @@ const OverviewBox = styled(Box)({
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
-  borderTop: '1px solid',
-  borderBottom: '1px solid',
+  borderTop: '1px solid rgba(111, 111, 111, .3)',
+  borderBottom: '1px solid rgba(111, 111, 111, .3)',
   padding: '2rem',
 });
 
 const JobPostingsOverview = ({ total_postings, unique_postings, ...props }: Props) => {
+  if (!total_postings || !unique_postings) {
+    return (
+      <Grid container direction="column" justifyContent="space-between" spacing={1}>
+        <Grid item xs={12}>
+          <Typography variant="h5" component="h2">
+            Loading...
+          </Typography>
+        </Grid>
+      </Grid>
+    );
+  }
   const formattedTotal = dynamicNumberFormat(total_postings);
   const formattedUnique = dynamicNumberFormat(unique_postings);
   const postingIntensity = Math.round(total_postings / unique_postings);
   return (
     <Grid container direction="column" justifyContent="space-between" spacing={1}>
       <Grid item xs={12}>
-        <Typography variant="h5" component="h2">
+        <Typography variant="h5" component="h2" fontWeight="500">
           Job Postings Overview
         </Typography>
       </Grid>
@@ -41,7 +52,9 @@ const JobPostingsOverview = ({ total_postings, unique_postings, ...props }: Prop
           </OverviewBox>
         </Grid>
         <Grid item xs={12} sm={4}>
-          <OverviewBox border={1}>
+          <OverviewBox
+            sx={{ borderRight: '1px solid rgba(111, 111, 111, .3)', borderLeft: '1px solid rgba(111, 111, 111, .3)' }}
+          >
             <Typography variant="h5" fontWeight="100">
               {postingIntensity} : 1
             </Typography>
