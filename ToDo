@@ -1,0 +1,6 @@
+[ ] Add e2e testing (cypress or playwright)
+[ ] Remove styles files?
+[ ] More graceful loading states and transitions
+[ ] Make initial load (index load) prettier
+[ ] Add Autocomplete
+[ ] More tests (page test, tests for each component)
