@@ -3,26 +3,20 @@ import Head from 'next/head';
 import { AppProps } from 'next/app';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import { CacheProvider as EmotionCacheProvider, EmotionCache } from '@emotion/react';
 import { Hydrate, QueryClient, QueryClientProvider } from 'react-query';
 import { AppPageProps } from '~/src/common/types';
 import theme from '~/src/common/theme';
-import createEmotionCache from '~/src//common/createEmotionCache';
 import '~/styles/globals.css';
 
-// Client-side cache, shared for the whole session of the user in the browser.
-const clientSideEmotionCache = createEmotionCache();
-
 interface MyAppProps extends AppProps {
-  emotionCache?: EmotionCache;
   pageProps: AppPageProps;
 }
 
 export default function MyApp(props: MyAppProps) {
-  const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
+  const { Component, pageProps } = props;
   const [queryClient] = useState(() => new QueryClient());
   return (
-    <EmotionCacheProvider value={emotionCache}>
+    <>
       <Head>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
@@ -35,6 +29,6 @@ export default function MyApp(props: MyAppProps) {
           </Hydrate>
         </QueryClientProvider>
       </ThemeProvider>
-    </EmotionCacheProvider>
+    </>
   );
 }
